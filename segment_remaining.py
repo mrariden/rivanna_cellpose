@@ -22,6 +22,10 @@ def segment_images(base_dir, slurm_script):
 
     original_imgs_path = base_path / 'original_images'
     masks_path = base_path / 'fiber_masks'
+    
+    # Remove the /sfs/weka/ where the /scratch dir might be mounted: 
+    masks_str = str(masks_path.resolve())
+    masks_str = masks_str.split('/sfs/weka')[-1]
 
     original_imgs = list(original_imgs_path.glob("*.tiff"))
     masks = list(masks_path.glob("*.png"))
@@ -38,17 +42,21 @@ def segment_images(base_dir, slurm_script):
                 break
 
     for img in remaining_imgs:
+        # Remove the /sfs/weka/ where the /scratch dir might be mounted: 
+        img_str = str(img.resolve())
+        img_str = img_str.split('/sfs/weka')[-1]
+        
         # Command order: script, full image path, mask out dir
-        cmd = ['sbatch', slurm_script, str(img.resolve()), str(masks_path.resolve())]
+        cmd = ['sbatch', slurm_script, img_str, masks_str]
         subprocess.run(cmd)
 
 def main():
     parser = argparse.ArgumentParser(description="Segment images using cellpose via SLURM.")
     parser.add_argument("base_dir", type=str, help="Base directory containing image folders.")
     parser.add_argument("-s", "--slurm_script", type=str, 
-            default=rv_cp_dir + "/fiber_seg_CLI_OME-model.slurm", 
+            default=rv_cp_dir + "/fiber_seg_CLI_OME-model_rvcp-modules.slurm", 
             help="Path to the SLURM script for image segmentation."
-            f"Default is the slurm script location: '{rv_cp_dir}/fiber_seg_CLI_OME-model.slurm'."
+            f"Default is the slurm script location: '{rv_cp_dir}/fiber_seg_CLI_OME-model_rvcp-modules.slurm'."
             )
 
     args = parser.parse_args()

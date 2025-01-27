@@ -24,21 +24,18 @@ exec 2>${error_log}
 module load apptainer
 module load cellpose
 
-# maybe some stuff that could go into env vars?
-PY_CMD="apptainer exec ${CONTAINERDIR}/cellpose-3.0.10.sif python"
-RVCP_CMD="apptainer run --nv ${CONTAINERDIR}/cellpose-3.0.10.sif -m cellpose"
 RVCP_DIR="/scratch/$(whoami)/rivanna_cellpose"
 
 echo Processing "${1}"
 
-res=$($PY_CMD $RVCP_DIR/get_image_file_resolution.py "${1}")
+res=$(apptainer exec ${CONTAINERDIR}/cellpose-3.0.10.sif python3 $RVCP_DIR/get_image_file_resolution.py "${1}")
 echo Resolution: $res
 
 diam=$(echo "60 * $res * 1.75" | bc)
 echo Using diameter: $diam
 echo Saving to dir: "${2}"
 
-$RVCP_CMD --use_gpu\
+apptainer run --nv ${CONTAINERDIR}/cellpose-3.0.10.sif -m cellpose --use_gpu\
      --image_path "${1}"\
      --chan 1\
      --chan2 3\
