@@ -57,10 +57,7 @@ def segment_images(base_dir, slurm_script, use_laminin_only):
         
         # Command order: script, full image path, mask out dir
         cmd = ['sbatch', slurm_script, img_str, masks_str]
-        # subprocess.run(cmd)
-        
-        print(cmd)
-        break
+        subprocess.run(cmd)
         
 
 def main():
