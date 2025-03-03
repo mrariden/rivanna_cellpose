@@ -21,7 +21,7 @@ This method leverages the modules installed to Rivanna and doesn't require any e
 #### Brief setup:
 1. Open a terminal on Rivanna
 2. Navigate to your scratch directory: `cd /scratch/<your_user_id>`
-3. Clone this repo to have the necessary code: `git clone git@github.com:mrariden/rivanna_cellpose.git`
+3. Clone this repo to have the necessary code: `git clone https://github.com/mrariden/rivanna_cellpose.git`
 
 #### Running cellpose with a single image file: 
 1. Open a terminal on Rivanna
@@ -32,7 +32,7 @@ This method leverages the modules installed to Rivanna and doesn't require any e
     
 #### Running cellpose with a folder of image files:
 1. Open a terminal on Rivanna
-2. Navigate to the first main directory where your files are stored, (where ever 'my_data_dir' is, from above).
+2. Navigate to your project directory where your files are stored, (inside of 'my_data_dir').
 3. Run the `segment_remaining.py` script: `python3 /scratch/<your_user_id>/rivanna_cellpose/segment_remaining.py $(pwd)`
     - This will search the `original_images` directory and will segment each image if there is no matching mask file in the `fiber_masks` directory. 
     - Each image is submitted as a seperate slurm job. Each file individually runs the slurm script above if the mask file is not found.
